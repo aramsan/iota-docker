@@ -1,0 +1,11 @@
+version: '3'
+services:
+    hornet:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        ports:
+            - "15600"
+            - "14626"
+            - "8081"
+            - "2222:22"
