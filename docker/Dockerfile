@@ -31,6 +31,9 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 WORKDIR /app
 RUN git clone https://github.com/gohornet/hornet.git
 RUN cd hornet;./scripts/build_hornet.sh
+COPY docker/config.json /app/hornet/config.json
+RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
+COPY docker/snapshot.csv /app/hornet/snapshot.csv
 
 EXPOSE 8081 14625 14626 15600 222
 CMD ["/usr/bin/supervisord"]
