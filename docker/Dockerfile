@@ -2,14 +2,16 @@ FROM ubuntu:18.04
 LABEL maintainer="Aram Mine <aram.mine@gaiax.com>"
 
 # install basic packages
-RUN apt update
-RUN apt -y upgrade
-RUN apt install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim
+RUN apt-get update
+RUN apt-get -y upgrade
+RUN apt-get install -y tzdata
+# work arround of non intaractive install 
+RUN apt-get install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim expect
 
 # install go
 RUN sudo add-apt-repository ppa:longsleep/golang-backports
-RUN apt update
-RUN apt install -y golang-go
+RUN apt-get update
+RUN apt-get install -y golang-go
 
 # setup ssh
 RUN mkdir /var/run/sshd
@@ -34,6 +36,9 @@ RUN cd hornet;./scripts/build_hornet.sh
 COPY docker/config.json /app/hornet/config.json
 RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
 COPY docker/snapshot.csv /app/hornet/snapshot.csv
+RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" nohup exec ./hornet --cooBootstrap &
+RUN expect -c 'spawn tail -f /app/hornet/hornet.log ; expect -timeout -1 "Valid milestone detected"' > /dev/null
 
-EXPOSE 8081 14625 14626 15600 222
+
+EXPOSE 8081 14265 14626 15600 222
 CMD ["/usr/bin/supervisord"]

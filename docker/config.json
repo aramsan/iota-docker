@@ -19,7 +19,8 @@
             "broadcastTransactions",
             "findTransactions",
             "storeTransactions",
-            "getTrytes"
+            "getTrytes",
+            "attachToTangle"
         ],
         "whitelistedAddresses": [],
         "bindAddress": "0.0.0.0:14265",
@@ -31,7 +32,7 @@
         }
     },
     "dashboard": {
-        "bindAddress": "localhost:8081",
+        "bindAddress": "0.0.0.0:8081",
         "theme": "default",
         "dev": false,
         "basicAuth": {
