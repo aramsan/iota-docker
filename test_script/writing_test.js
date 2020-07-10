@@ -9,6 +9,15 @@ const Converter = require('@iota/converter');
 const iota = Iota.composeAPI({
     provider: 'http://localhost:14265'
 });
+const node1 = Iota.composeAPI({
+    provider: 'http://localhost:14266'
+});
+
+const node2 = Iota.composeAPI({
+    provider: 'http://localhost:14267'
+});
+
+
 const depth = 3;
 const minimumWeightMagnitude = 5;
 
@@ -46,8 +55,38 @@ iota
         return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
     })
     .then(bundle => {
+        console.log("hornet");
         console.log(bundle[0].hash);
     })
     .catch(err => {
-        console.error(err)
+        console.log("hornet");
+        console.error(err);
+    });
+
+node1
+    .prepareTransfers(seed, transfers)
+    .then(trytes => {
+        return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
+    })
+    .then(bundle => {
+        console.log("node1");
+        console.log(bundle[0].hash);
+    })
+    .catch(err => {
+        console.log("node1");
+        console.error(err);
+    });
+
+node2
+    .prepareTransfers(seed, transfers)
+    .then(trytes => {
+        return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
+    })
+    .then(bundle => {
+        console.log("node2");
+        console.log(bundle[0].hash);
+    })
+    .catch(err => {
+        console.log("node2");
+        console.error(err);
     });

@@ -4,10 +4,33 @@ services:
         build:
             context: .
             dockerfile: docker/Dockerfile
-        # network_mode: "host"
         ports:
             - "15600:15600"
             - "14265:14265" 
             - "14626:14626"
             - "8081:8081"
             - "2222:222"
+    node1:
+        build:
+            context: .
+            dockerfile: child-nodes/Dockerfile
+        ports:
+            - "15601:15600"
+            - "14266:14265" 
+            - "14627:14626"
+            - "8082:8081"
+            - "2223:222"
+        links:
+            - "hornet:hornet"
+    node2:
+        build:
+            context: .
+            dockerfile: child-nodes/Dockerfile
+        ports:
+            - "15602:15600"
+            - "14267:14265" 
+            - "14628:14626"
+            - "8083:8081"
+            - "2224:222"
+        links:
+            - "hornet:hornet"
