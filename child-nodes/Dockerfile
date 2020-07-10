@@ -27,18 +27,14 @@ RUN echo "export VISIBLE=now" >> /etc/profile
 
 # setup supervisrod
 RUN mkdir /var/log/hornet
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY child-nodes/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # install hornet
 WORKDIR /app
 RUN git clone https://github.com/gohornet/hornet.git
 RUN cd hornet;./scripts/build_hornet.sh
-COPY docker/config.json /app/hornet/config.json
-RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
+COPY child-nodes/config.json /app/hornet/config.json
 COPY docker/snapshot.csv /app/hornet/snapshot.csv
-RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" nohup exec ./hornet --cooBootstrap &
-RUN expect -c 'spawn tail -f /app/hornet/hornet.log ; expect -timeout -1 "Valid milestone detected"' > /dev/null
-
 
 EXPOSE 8081 14265 14626 15600 222
 CMD ["/usr/bin/supervisord"]
