@@ -1,9 +1,11 @@
 {
   "dependencies": {
     "@iota/converter": "1.0.0-beta.30",
-    "@iota/core": "1.0.0-beta.30"
+    "@iota/core": "1.0.0-beta.30",
+    "@iota/extract-json": "1.0.0-beta.30"
   },
   "scripts": {
-    "test": "node writing_test.js"
+    "test": "node write_read_test.js",
+    "write-test": "node writing_test.js"
   }
 }
