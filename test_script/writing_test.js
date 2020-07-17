@@ -66,7 +66,7 @@ iota
 node1
     .prepareTransfers(seed, transfers)
     .then(trytes => {
-        return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
+        return node1.sendTrytes(trytes, depth, minimumWeightMagnitude);
     })
     .then(bundle => {
         console.log("node1");
@@ -80,7 +80,7 @@ node1
 node2
     .prepareTransfers(seed, transfers)
     .then(trytes => {
-        return iota.sendTrytes(trytes, depth, minimumWeightMagnitude);
+        return node2.sendTrytes(trytes, depth, minimumWeightMagnitude);
     })
     .then(bundle => {
         console.log("node2");
