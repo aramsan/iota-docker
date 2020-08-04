@@ -6,7 +6,7 @@ Create multiple iota test nodes with docker.
 
 ## prepare base server
 
-### Reuqured setting
+### Reuqured specification
 - 8GB or upper RAM
 - A dual-core CPU
 
@@ -40,7 +40,20 @@ $ docker-compose up -d
 
 ### Check the node
 
-Open a web browser on your remote pc and go to localhost:8081. If you can see the dashboard, then it works.
+Open a web browser on your host pc and go to localhost:8081. If you can see the dashboard, then it works.
 Dashboard of node1: localhost:8082
-Dashboard of node1: localhost:8083
+   ...
+Dashboard of node4: localhost:8085
+
+# How to Test
+
+Change current directory to test_script and run the test script.
+
+```
+$ cd test_srcript
+$ yarn test
+```
+
+See the visualizer on http://localhost:8081:/visalizer with browser on host PC.
+
 
