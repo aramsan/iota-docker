@@ -6,7 +6,7 @@
     "crypto": "1.0.1"
   },
   "scripts": {
-    "test": "node continuous_writing_test.js",
+    "test": "node continuous_writing_self.js",
     "write-read-test": "node write_read_test.js",
     "write-test": "node writing_test.js"
   }
