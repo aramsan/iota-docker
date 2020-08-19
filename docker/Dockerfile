@@ -6,7 +6,8 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get install -y tzdata
 # work arround of non intaractive install 
-RUN apt-get install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim expect
+RUN apt-get update
+RUN apt-get install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim npm
 
 # install go
 RUN sudo add-apt-repository ppa:longsleep/golang-backports
@@ -25,20 +26,24 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 #ENV NOTVISIBLE "in users profile"
 RUN echo "export VISIBLE=now" >> /etc/profile
 
-# setup supervisrod
-RUN mkdir /var/log/hornet
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
 # install hornet
 WORKDIR /app
+
 RUN git clone https://github.com/gohornet/hornet.git
+
 RUN cd hornet;./scripts/build_hornet.sh
 COPY docker/config.json /app/hornet/config.json
+RUN mkdir /var/log/hornet
 RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
 COPY docker/snapshot.csv /app/hornet/snapshot.csv
-RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" nohup exec ./hornet --cooBootstrap &
-RUN expect -c 'spawn tail -f /app/hornet/hornet.log ; expect -timeout -1 "Valid milestone detected"' > /dev/null
 
+# setup test script
+RUN git clone https://github.com/aramsan/iota-docker.git
+RUN cd iota-docker/test_script; npm i
+
+# setup supervisrod
+COPY docker/supervisord.conf /app/hornet/supervisord.conf
+COPY docker/supervisord-init.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8081 14265 14626 15600 222
 CMD ["/usr/bin/supervisord"]

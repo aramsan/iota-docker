@@ -34,3 +34,27 @@ services:
             - "2224:222"
         links:
             - "hornet:hornet"
+    node3:
+        build:
+            context: .
+            dockerfile: child-nodes/Dockerfile
+        ports:
+            - "15603:15600"
+            - "14268:14265" 
+            - "14629:14626"
+            - "8084:8081"
+            - "2225:222"
+        links:
+            - "hornet:hornet"
+    node4:
+        build:
+            context: .
+            dockerfile: child-nodes/Dockerfile
+        ports:
+            - "15604:15600"
+            - "14269:14265" 
+            - "14630:14626"
+            - "8085:8081"
+            - "2226:222"
+        links:
+            - "hornet:hornet"

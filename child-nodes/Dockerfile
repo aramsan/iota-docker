@@ -6,7 +6,8 @@ RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get install -y tzdata
 # work arround of non intaractive install 
-RUN apt-get install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim expect
+RUN apt-get update
+RUN apt-get install -y sudo curl gnupg gnupg2 gnupg1 git build-essential software-properties-common openssh-server supervisor vim npm
 
 # install go
 RUN sudo add-apt-repository ppa:longsleep/golang-backports
@@ -35,6 +36,10 @@ RUN git clone https://github.com/gohornet/hornet.git
 RUN cd hornet;./scripts/build_hornet.sh
 COPY child-nodes/config.json /app/hornet/config.json
 COPY docker/snapshot.csv /app/hornet/snapshot.csv
+
+# setup test script
+RUN git clone https://github.com/aramsan/iota-docker.git
+RUN cd iota-docker/test_script;git checkout continuous-writing;npm i
 
 EXPOSE 8081 14265 14626 15600 222
 CMD ["/usr/bin/supervisord"]
