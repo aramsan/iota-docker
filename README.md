@@ -8,7 +8,7 @@ Create multiple iota test nodes with docker.
 
 ### Reuqured specification
 - 8GB or upper RAM
-- A dual-core CPU
+- A quad-core or upper CPU
 
 ### Setup Docker
 
@@ -47,12 +47,7 @@ Dashboard of node4: localhost:8085
 
 # How to Test
 
-Change current directory to test_script and run the test script.
-
-```
-$ cd test_srcript
-$ yarn test
-```
+Test script will run automatically after 120 sec since boot the peer.
 
 See the visualizer on http://localhost:8081:/visalizer with browser on host PC.
 
