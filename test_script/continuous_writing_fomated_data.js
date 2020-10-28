@@ -91,7 +91,7 @@ function preparTransferMessage(address, data) {
 function writeToTangle(payload) {
     console.log(payload);
     const targetNode = payload.node;
-    const address = payload.address
+    const address = payload.address;
 
     const transfers = preparTransferMessage(address, payload.data);
     targetNode.prepareTransfers(seed, transfers)
