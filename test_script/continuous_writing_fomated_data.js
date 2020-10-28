@@ -56,8 +56,8 @@ setInterval(function () {
             "hash_list": hash_list,
             "camera_public_key": keypair.publicKey
         };
-        console.log(data);
-        writeToTangle({ "node": iota, "data": data});
+        //console.log(data);
+        writeToTangle({"node": iota, "address":address, "data": data});
         start_frame_mumber = seq_id + 1;
         hash_list = [];
     }
@@ -88,12 +88,12 @@ function preparTransferMessage(address, data) {
     ];
 }
 
-function writeToTangle(node, data) {
-    const name = node.name;
-    const targetNode = node.node;
-    const address = node.address
+function writeToTangle(payload) {
+    console.log(payload);
+    const targetNode = payload.node;
+    const address = payload.address
 
-    const transfers = preparTransferMessage(address, data);
+    const transfers = preparTransferMessage(address, payload.data);
     targetNode.prepareTransfers(seed, transfers)
         .then(trytes => {
             return targetNode.sendTrytes(trytes, depth, minimumWeightMagnitude);
