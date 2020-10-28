@@ -47,7 +47,7 @@ setInterval(function () {
     hash = createDataHash();
     let signature = createSignature(hash, keypair.privateKey );
     hash_list.push({"frame_id": frame_id, "previous_hash":previous_hash, "hash":hash, "signature":signature});
-    if ((counter % 30) == 0) {
+    if ((counter % 3) == 0) {
         let data = {
             "seq_id": seq_id,
             "camera_id": camera_id,
