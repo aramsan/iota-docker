@@ -101,7 +101,6 @@ function preparTransferMessage(address, data) {
 }
 
 function writeToTangle(payload) {
-    console.log(payload);
     const targetNode = payload.node;
     const address = payload.address;
 
@@ -110,10 +109,10 @@ function writeToTangle(payload) {
         .then(trytes => {
             return targetNode.sendTrytes(trytes, depth, minimumWeightMagnitude);
         })
-        //.then(bundle => {
-        //    const bundle_hash = bundle[0].bundle;
-        //    console.log(bundle_hash + " <- bundle hash - " + name);
-        //})
+        .then(bundle => {
+            const bundle_hash = bundle[0].hash;// このハッシュ値をデータベースに書き込む
+            console.log(bundle_hash + " <- transaction hash- " + payload.data.seq_id);
+        })
         .catch(err => {
             console.log(err);
         })
