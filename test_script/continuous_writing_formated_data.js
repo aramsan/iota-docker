@@ -28,8 +28,8 @@ var seq_id = 0;
 var frame_id = 0;
 var camera_id = 1;
 var start_frame_mumber = 1;
-var hash_list = [];
 var hash = "0";
+var previous_transaction_hash = hash;
 
 var keypair = createKeyPair()
 console.log(keypair);
@@ -41,27 +41,39 @@ console.log(verifySignature(hash, keypair.publicKey, signature ));
 
 setInterval(function () {
     counter++;
-    seq_id++;
     frame_id++;
     let previous_hash = hash;
-    hash = createDataHash();
-    let signature = createSignature(hash, keypair.privateKey );
-    hash_list.push({"frame_id": frame_id, "previous_hash":previous_hash, "hash":hash, "signature":signature});
-    if ((counter % 3) == 0) {
+    let current_hash = createDataHash();
+    hash = StackHash(previous_hash, current_hash);
+    /*
+    console.log("---------------------");
+    console.log(counter);
+    console.log(hash);
+    */
+    if ((counter % 10) == 0) {
+        seq_id++;
+        let signature = createSignature(hash, keypair.privateKey );
         let data = {
             "seq_id": seq_id,
             "camera_id": camera_id,
             "start_frame_number": start_frame_mumber,
-            "end_frame_number": seq_id,
-            "hash_list": hash_list,
+            "end_frame_number": counter,
+            "previous_transaction_hash": previous_transaction_hash, 
+            "hash": hash,
+            "signature": signature,
             "camera_public_key": keypair.publicKey
         };
-        //console.log(data);
+        console.log(data);
         writeToTangle({"node": iota, "address":address, "data": data});
-        start_frame_mumber = seq_id + 1;
-        hash_list = [];
+        start_frame_mumber = counter + 1;
+        previous_transaction_hash = hash;
+        hash = 0; // 次のハッシュチェーンの初期値をゼロにする
     }
 }, 33);
+
+function StackHash(previous_hash, current_hash) {
+    return crypto.createHash('sha256').update(previous_hash + current_hash).digest('hex');
+}
 
 function createDataHash() {
     const date = new Date();
