@@ -20,7 +20,8 @@ const minimumWeightMagnitude = 5;
 const securityLevel = 2;
 
 const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
-const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
+var address = await getAddress(seed, 1)[0];
+//const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
 var nodes;
 
 var counter = 0;
@@ -68,7 +69,7 @@ setInterval(function () {
             "camera_public_key": keypair.publicKey
         };
         console.log(data);
-        //writeToTangle({"node": iota, "address":address, "data": data});
+        writeToTangle({"node": iota, "address":address, "data": data});
         // 次の記録のための各パラメーターの準備
         start_frame_mumber = counter + 1;
         previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
@@ -126,6 +127,11 @@ function writeToTangle(payload) {
 async function delay(ms) {
     // return await for better async stack trace support in case of errors.
     return await new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function getAddress(seed, index) {
+    let newAddress = await iota.getNewAddress(seed, { index: index, securityLevel: securityLevel, total: 1 })
+    return newAddress[0];
 }
 
 function createKeyPair() {
