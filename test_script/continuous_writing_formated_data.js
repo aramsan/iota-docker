@@ -21,8 +21,9 @@ const securityLevel = 2;
 
 const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
 
+main();
+
 async function main(){
-    var address = await getAddress(seed, 1);
     //const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
     var nodes;
 
@@ -43,7 +44,7 @@ async function main(){
     console.log(verifySignature(hash, keypair.publicKey, signature ));
     */
 
-    setInterval(function () {
+    setInterval(async function() {
         counter++;
         frame_id++;
         let current_hash = createDataHash();
@@ -136,8 +137,8 @@ async function delay(ms) {
     return await new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function getAddress(seed, index) {
-    let newAddress = await iota.getNewAddress(seed, { index: index, securityLevel: securityLevel, total: 1 })
+function getAddress(seed, index) {
+    let newAddress = await iota.getNewAddress(seed, { index: index, securityLevel: securityLevel, total: 1 });
     return newAddress[0];
 }
 
