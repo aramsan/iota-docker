@@ -20,62 +20,69 @@ const minimumWeightMagnitude = 5;
 const securityLevel = 2;
 
 const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
-var address = await getAddress(seed, 1)[0];
-//const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
-var nodes;
 
-var counter = 0;
-var seq_id = 0;
-var frame_id = 0;
-var camera_id = 1;
-var start_frame_mumber = 1;
-var previous_temporary_transction_hash = 0;
-var previous_transaction_hash = 0;
+async function main(){
+    var address = await getAddress(seed, 1);
+    //const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
+    var nodes;
+
+    var counter = 0;
+    var seq_id = 0;
+    var frame_id = 0;
+    var camera_id = 1;
+    var start_frame_mumber = 1;
+    var previous_temporary_transction_hash = 0;
+    var previous_transaction_hash = 0;
 
 
-var keypair = createKeyPair()
-console.log(keypair);
+    var keypair = createKeyPair()
+    console.log(keypair);
 
-/*
-//hashの検証方法
-console.log(verifySignature(hash, keypair.publicKey, signature ));
-*/
+    /*
+    //hashの検証方法
+    console.log(verifySignature(hash, keypair.publicKey, signature ));
+    */
 
-setInterval(function () {
-    counter++;
-    frame_id++;
-    let current_hash = createDataHash();
-    let temporary_transction_hash = StackHash(previous_temporary_transction_hash, current_hash);
-    //*
-    console.log("---------------------");
-    console.log(counter);
-    console.log(previous_temporary_transction_hash);
-    console.log(current_hash);
-    console.log(temporary_transction_hash);
-    console.log("---------------------");
-    //*/
-    if ((counter % 3) == 0) {
-        let hash = temporary_transction_hash;
-        seq_id++;
-        let signature = createSignature(hash, keypair.privateKey );
-        let data = {
-            "seq_id": seq_id,
-            "camera_id": camera_id,
-            "first_frame_number": start_frame_mumber,
-            "last_frame_number": counter,
-            "previous_transaction_hash": previous_transaction_hash, 
-            "hash": hash,
-            "signature": signature,
-            "camera_public_key": keypair.publicKey
-        };
-        console.log(data);
-        writeToTangle({"node": iota, "address":address, "data": data});
-        // 次の記録のための各パラメーターの準備
-        start_frame_mumber = counter + 1;
-        previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
-    }
-    previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
-}, 33);
+    setInterval(function () {
+        counter++;
+        frame_id++;
+        let current_hash = createDataHash();
+        let temporary_transction_hash = StackHash(previous_temporary_transction_hash, current_hash);
+        //*
+        console.log("---------------------");
+        console.log(counter);
+        console.log(previous_temporary_transction_hash);
+        console.log(current_hash);
+        console.log(temporary_transction_hash);
+        console.log("---------------------");
+        //*/
+        if ((counter % 3) == 0) {
+            let hash = temporary_transction_hash;
+            seq_id++;
+            let signature = createSignature(hash, keypair.privateKey );
+            let data = {
+                "seq_id": seq_id,
+                "camera_id": camera_id,
+                "first_frame_number": start_frame_mumber,
+                "last_frame_number": counter,
+                "previous_transaction_hash": previous_transaction_hash, 
+                "hash": hash,
+                "signature": signature,
+                "camera_public_key": keypair.publicKey
+            };
+            console.log(data);
+            var address = await getAddress(seed, seq_id);
+            console.log('addressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddress');
+            console.log(address);
+            console.log('addressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddress');
+            writeToTangle({"node": iota, "address":address, "data": data});
+            // 次の記録のための各パラメーターの準備
+            start_frame_mumber = counter + 1;
+            previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
+        }
+        previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
+    }, 33);
+}
 
 function StackHash(previous_hash, current_hash) {
     return crypto.createHash('sha256').update(previous_hash + current_hash).digest('hex');
