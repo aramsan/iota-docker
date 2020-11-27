@@ -24,7 +24,7 @@ const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKB
 main();
 
 async function main(){
-    //const address = 'IRZBQCZFOJXUPJKTEBQJBGQIUBV9EDLIUBEWRAWAQRIU9G9CEJETFO9NLABP9J9FXEUDEQDKPSTPNTJMZ';
+    var address = await getAddress(seed, seq_id);
     var nodes;
 
     var counter = 0;
@@ -72,10 +72,6 @@ async function main(){
                 "camera_public_key": keypair.publicKey
             };
             console.log(data);
-            var address = await getAddress(seed, seq_id);
-            console.log('addressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddress');
-            console.log(address);
-            console.log('addressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddressaddress');
             writeToTangle({"node": iota, "address":address, "data": data});
             // 次の記録のための各パラメーターの準備
             start_frame_mumber = counter + 1;
