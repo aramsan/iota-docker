@@ -24,9 +24,9 @@ const securityLevel = 2;
 
 const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
 const address = getAddress(seed, 1);
-const kerpair = createKeyPair();
+const keypair = createKeyPair();
 
-var start_frame_mumber = 1;
+var start_frame_number = 1;
 var previous_temporary_transction_hash = 0;
 var previous_transaction_hash = 0;
 
@@ -36,20 +36,6 @@ var server = app.listen(3000, function(){
 });
 
 /* 3. 以後、アプリケーション固有の処理 */
-
-/*
-let data = {
-                "seq_id": seq_id,
-                "camera_id": camera_id,
-                "first_frame_number": start_frame_mumber,
-                "last_frame_number": counter,
-                "previous_transaction_hash": previous_transaction_hash, 
-                "hash": hash,
-                "signature": signature,
-                "camera_public_key": keypair.publicKey
-            };
-*/
-
 // write API
 app.post("/api/set", [
     check('seq_id').isInt(),
@@ -57,12 +43,34 @@ app.post("/api/set", [
     check('frame_number').isInt(),
     check('hash').isHash('sha256')
 ],function(req, res){
-    var ret = {};
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(422).json({ errors: errors.array() });
     }
 
+    var ret = {};
+    let temporary_transction_hash = stackHash(previous_temporary_transction_hash, req.body.hash);// 1つ前のハッシュ値に今回のハッシュ値を重畳する
+    if(req.body.execute) {
+        let hash = temporary_transction_hash;
+        let signature = createSignature(hash, keypair.privateKey );// ハッシュ値に署名をつける
+        let data = {
+            "seq_id": req.body.seq_id,
+            "camera_id": req.body.camera_id,
+            "first_frame_number": start_frame_number,
+            "last_frame_number": req.body.frame_number,
+            "previous_transaction_hash": previous_transaction_hash, 
+            "hash": hash,
+            "signature": signature,
+            "camera_public_key": keypair.publicKey
+        };
+        console.log(data);
+        //writeToTangle({"node": iota, "address":address, "data": data});
+        
+        // 次の記録のための各パラメーターの準備
+        start_frame_mumber = req.body.frame_number + 1;
+        previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
+    }
+    previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
     ret.result = "OK";
     res.json(ret);
 });
@@ -73,7 +81,7 @@ app.get("/api/test", function(req, res, next){
 });
 
 // CaaS関連関数
-function StackHash(previous_hash, current_hash) {
+function stackHash(previous_hash, current_hash) {
     return crypto.createHash('sha256').update(previous_hash + current_hash).digest('hex');
 }
 
