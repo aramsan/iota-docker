@@ -5,6 +5,7 @@
     "@iota/extract-json": "1.0.0-beta.30",
     "crypto": "1.0.1",
     "elliptic": "6.5.3",
+    "express": "4.17.1",
     "secure-random": "1.1.2"
   },
   "scripts": {
