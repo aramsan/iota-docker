@@ -39,7 +39,7 @@ COPY docker/snapshot.csv /app/hornet/snapshot.csv
 
 # setup test script
 RUN git clone https://github.com/aramsan/iota-docker.git
-RUN cd iota-docker/test_script;git checkout continuous-writing;npm i
+RUN cd iota-docker/test_script;npm i
 
 EXPOSE 8081 14265 14626 15600 222
 CMD ["/usr/bin/supervisord"]
