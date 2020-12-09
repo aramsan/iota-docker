@@ -24,7 +24,7 @@ async function main(){
             "frame_number":frame_number, 
         };
 
-        if ((seq_id % 3) == 0) { body.execute = 1; }
+        if ((seq_id % 30) == 0) { body.execute = 1; }
 
         request.post({url:API_URL, headers:headers, body:JSON.stringify(body)},function(error, response, body){
             console.log(body);
