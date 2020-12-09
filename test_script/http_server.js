@@ -74,7 +74,10 @@ app.post("/api/set", [
         previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
     }
     previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
-    ret.result = "OK";
+
+    const now = date.getTime();
+    ret.resutl = "OK";
+    ret.timestamp = String(now);
     res.json(ret);
 });
 
