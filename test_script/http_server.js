@@ -23,7 +23,10 @@ const minimumWeightMagnitude = 5;
 const securityLevel = 2;
 
 const seed = 'PUEOTSEITFEVEWCWBTSIZM9NKRGJEIMXTULBACGFRQK9IMGICLBKW9TTEVSDQMGWKBXPVCBMMCXWMNPDX';
-const address = getAddress(seed, 1);
+var address;
+getAddress(seed, 1).then(function(ret_address){
+    address = ret_address;
+});
 const keypair = createKeyPair();
 
 var start_frame_number = 1;
@@ -64,7 +67,7 @@ app.post("/api/set", [
             "camera_public_key": keypair.publicKey
         };
         console.log(data);
-        //writeToTangle({"node": iota, "address":address, "data": data});
+        writeToTangle({"node": iota, "address":address, "data": data});
         
         // 次の記録のための各パラメーターの準備
         start_frame_mumber = req.body.frame_number + 1;
