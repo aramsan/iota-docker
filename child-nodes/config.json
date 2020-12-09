@@ -57,7 +57,7 @@
         "enabled": true
     },
     "coordinator": {
-        "address": "BVBPWZ9TFIKQYSEGCMZDSGWXUOI9DZT9WDEMWGABVRCNCAUYZYPVJPDIJNJBTKAQMFBEJKKUMRQDWIZVX",
+        "address": "XKEIACLRLMOS9KJRTLHYNXSMKECTIODNP9QICYUIPFCLZOADMGSHFTXQNFENFJIRJYLTC9UALJGHLAQAC",
         "securityLevel": 2,
         "merkleTreeDepth": 5,
         "mwm": 5,

@@ -34,7 +34,7 @@ RUN git clone https://github.com/gohornet/hornet.git
 RUN cd hornet;./scripts/build_hornet.sh
 COPY docker/config.json /app/hornet/config.json
 RUN mkdir /var/log/hornet
-RUN cd hornet;COO_SEED="JFXSJBHMRKOUGVGCLQZRJDLFQQFRTEGEGJZXLGJEVLJLBWVYORHYPNOWFCGKNKDGEXYTSAYYIOUC9LNQK" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
+RUN cd hornet;COO_SEED="IDKVCFIMYTGVRNFDJJRQHFZEMWCSJ9JUJLMGTAGGHZNNLHGR99SUXMVTIEGQRCSAXUXIXTONRAGGYTXFA" ./hornet -d ./ tool merkle > /var/log/hornet/markletree.log
 COPY docker/snapshot.csv /app/hornet/snapshot.csv
 
 # setup test script
