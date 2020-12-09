@@ -75,6 +75,7 @@ app.post("/api/set", [
     }
     previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
 
+    const date = new Date();
     const now = date.getTime();
     ret.resutl = "OK";
     ret.timestamp = String(now);
