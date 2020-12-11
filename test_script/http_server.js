@@ -29,7 +29,7 @@ getAddress(seed, 1).then(function(ret_address){
 });
 const keypair = createKeyPair();
 
-var start_frame_number = 1;
+var first_frame_number = 1;
 var previous_temporary_transction_hash = 0;
 var previous_transaction_hash = 0;
 
@@ -59,7 +59,7 @@ app.post("/api/set", [
         let data = {
             "seq_id": req.body.seq_id,
             "camera_id": req.body.camera_id,
-            "first_frame_number": start_frame_number,
+            "first_frame_number": first_frame_number,
             "last_frame_number": req.body.frame_number,
             "previous_transaction_hash": previous_transaction_hash, 
             "hash": hash,
@@ -70,7 +70,7 @@ app.post("/api/set", [
         writeToTangle({"node": iota, "address":address, "data": data});
         
         // 次の記録のための各パラメーターの準備
-        start_frame_mumber = req.body.frame_number + 1;
+        first_frame_mumber = req.body.frame_number + 1;
         previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
     }
     previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
