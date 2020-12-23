@@ -57,9 +57,9 @@
         "enabled": true
     },
     "coordinator": {
-        "address": "BVBPWZ9TFIKQYSEGCMZDSGWXUOI9DZT9WDEMWGABVRCNCAUYZYPVJPDIJNJBTKAQMFBEJKKUMRQDWIZVX",
+        "address": "VLWMMPD9QEEJDEUWJPQN9TNWVRJKMQUGHLWLEBGQQRNZPJTWFMKTTK9GDJVMMVOLKQIPHYXAGASGWMNDW",
         "securityLevel": 2,
-        "merkleTreeDepth": 5,
+        "merkleTreeDepth": 18,
         "mwm": 5,
         "stateFilePath": "coordinator.state",
         "merkleTreeFilePath": "coordinator.tree",

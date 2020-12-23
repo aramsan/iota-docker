@@ -53,10 +53,33 @@ Dashboard of node1: localhost:8082
    ...
 Dashboard of node4: localhost:8085
 ```
+### SSH connection
+
+- hornet node
+```
+ssh root@localhost -p 2222
+```
+- The password is 'root'.
+
+- child nodes
+```
+ssh root@localhost -p 2223
+    ...
+ssh root@localhost -p 2225
+```
+- The password is 'root'.
+
 
 # How to Test
 
-- Test script will run automatically after 120 sec since boot the peer.
+- Enter the child node via SSH. Then execute test scirpt.
+```
+ssh root@localhost -p 2223
+    ...
+cd /app/iota-docker/scripts/test_scripts
+npm run test
+```
+
 - See the visualizer on http://localhost:8081:/visalizer with browser on host PC. 
 - If AWS EC2 is used, then see the visualizer on http://ec2-xxx-xxx-xxx-xxx.region-region-xx.compute.amazonaws.com with browser on own PC.
 

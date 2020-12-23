@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@iota/converter": "1.0.0-beta.30",
+    "@iota/core": "1.0.0-beta.30",
+    "@iota/extract-json": "1.0.0-beta.30",
+    "crypto": "1.0.1",
+    "elliptic": "6.5.3",
+    "express": "4.17.1",
+    "express-validator": "6.7.0",
+    "secure-random": "1.1.2"
+  },
+  "scripts": {
+    "server": "node http_server.js",
+    "test": "node test_scripts/http_reqeust_test.js",
+    "test-continuouly": "node test_scripts/continuous_writing_formated_data.js",
+    "write-read-test": "node test_scripts/write_read_test.js",
+    "write-test": "node test_scripts/writing_test.js"
+  }
+}
