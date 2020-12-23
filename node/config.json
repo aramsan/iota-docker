@@ -76,7 +76,7 @@
             "bindAddress": "0.0.0.0:14626",
             "runAsEntryNode": false,
             "entryNodes": [
-                "6noHEbH6f8buENiNZtmzLK4fKJ1xPX43JAgVagiYyftv@hornet:14626"
+                "6noHEbH6f8buENiNZtmzLK4fKJ1xPX43JAgVagiYyftv@HOSTADDRESS:14626"
             ],
             "seed": ""
         }

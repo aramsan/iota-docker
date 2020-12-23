@@ -2,8 +2,8 @@ version: '3'
 services:
     hornet:
         build:
-            context: .
-            dockerfile: docker/Dockerfile
+            context: hornet/
+            dockerfile: Dockerfile
         ports:
             - "15600:15600"
             - "14265:14265" 
@@ -12,8 +12,10 @@ services:
             - "2222:222"
     node1:
         build:
-            context: .
-            dockerfile: child-nodes/Dockerfile
+            context: node/
+            dockerfile: Dockerfile
+            args:
+                HORNETADDRESS: "hornet"
         ports:
             - "15601:15600"
             - "14266:14265" 
@@ -24,8 +26,10 @@ services:
             - "hornet:hornet"
     node2:
         build:
-            context: .
-            dockerfile: child-nodes/Dockerfile
+            context: node/
+            dockerfile: Dockerfile
+            args:
+                HORNETADDRESS: "hornet"
         ports:
             - "15602:15600"
             - "14267:14265" 
@@ -36,8 +40,10 @@ services:
             - "hornet:hornet"
     node3:
         build:
-            context: .
-            dockerfile: child-nodes/Dockerfile
+            context: node/
+            dockerfile: Dockerfile
+            args:
+                HORNETADDRESS: "hornet"
         ports:
             - "15603:15600"
             - "14268:14265" 
@@ -48,8 +54,10 @@ services:
             - "hornet:hornet"
     node4:
         build:
-            context: .
-            dockerfile: child-nodes/Dockerfile
+            context: node/
+            dockerfile: Dockerfile
+            args:
+                HORNETADDRESS: "hornet"
         ports:
             - "15604:15600"
             - "14269:14265" 

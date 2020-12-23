@@ -33,8 +33,27 @@ $ git clone https://github.com/aramsan/iota-docker/
 ```
 
 ### Build the docker Image
+#### 1 honet node and 4 child nodes
 
 ```
+$ docker-compse build
+```
+
+#### Individual Hornet node
+- This is for cloud server.
+
+```
+$ cd hornet
+$ docker-compse build
+```
+
+#### Individual child node
+- This is for the edge server.
+- Please prepar the IP Address of Hornet node.
+
+```
+$ cd node
+$ export HORNETADDRESS=xx.xx.xx.xx
 $ docker-compse build
 ```
 
