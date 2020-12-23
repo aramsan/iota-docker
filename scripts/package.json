@@ -10,10 +10,10 @@
     "secure-random": "1.1.2"
   },
   "scripts": {
-    "test": "node continuous_writing_formated_data.js",
     "server": "node http_server.js",
-    "test-continuouly": "node continuous_writing_self.js",
-    "write-read-test": "node write_read_test.js",
-    "write-test": "node writing_test.js"
+    "test": "node test_scripts/test_scripts/http_reqeust_test.js",
+    "test-continuouly": "node test_scripts/continuous_writing_formated_data.js",
+    "write-read-test": "node test_scripts/write_read_test.js",
+    "write-test": "node test_scripts/writing_test.js"
   }
 }
