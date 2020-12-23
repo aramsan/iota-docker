@@ -77,7 +77,7 @@ ssh root@localhost -p 2225
 ssh root@localhost -p 2223
     ...
 cd /app/iota-docker/scripts/test_scripts
-yarn test
+npm run test
 ```
 
 - See the visualizer on http://localhost:8081:/visalizer with browser on host PC. 
