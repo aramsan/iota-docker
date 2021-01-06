@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sudo apt-get remove -y docker docker-engine docker.io containerd runc
-sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common git vim
+sudo apt-get install -y apt-transport-https ca-certificates curl gnupg-agent software-properties-common git vim nodejs npm
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update

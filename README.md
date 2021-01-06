@@ -1,100 +1,216 @@
-# iota-docker
+# IOTA-docker
 
-Create multiple iota test nodes with docker.
+Build multiple IOTA test nodes with docker.
+Samplecodes of movie hashing are included.
 
 # How to setup
+## For development evironmenet
 
-## prepare base server
+This information is for a development environmenet. It is assumed PC or vertual machine.
 
 ### Reuquired specification
 - 8GB or upper RAM
-- A quad-core or upper CPU
-
-### Required AWS EC2 Setteing
-- 8GB or upper RAM
-- A quad-core or upper CPU
-   - The t3.xlarge is enogh to meet the reuqriements.
-- Open port 8081-8085, 14265, 15600, 14626 with securiy group
+- A dual-core or upper CPU
+- Ubuntu 18.04, MacOS X or Later
 
 ### Setup Docker
+- Install dokcer & docker compose.
+    - See the officail page of Dcoker.
+        - https://docs.docker.com/engine/install/
+        - https://docs.docker.com/compose/install/
 
-- Install dokcer & docker compose
+### Install node.js and npm
 
-- See the officail page of Dcoker.
-    - https://docs.docker.com/engine/install/
-    - https://docs.docker.com/compose/install/
+```
+$ sudo apt install nodejs npm
+```
 
-## Start Iota Docker Container
+node 8.10.0 or later is requeired. Please check the vession.
 
-### Clone from github
+```
+$ node -v
+```
+
+### Setup Docker Instanse 
 
 ```
 $ git clone https://github.com/aramsan/iota-docker/
+$ cd iota-docker
+$ docker-compse build
 ```
 
-### Build the docker Image
-#### Individual Hornet node
-- This is for cloud server.
+### Start Up Blockchain
 
 ```
+$ dcoker-compose -up d
+```
+
+### How to Test
+
+#### Check the dashboad
+- Open a web browser on your pc and go to the dashboard url(localhost:8081).
+- If you can see the dashboard, then it works.
+- After that, check the sync status. If "Synced" is displayed, it is OK.
+
+#### Check the writing function
+
+```
+$ cd iota-docker/scripts
+$ npm run test
+```
+
+- Open a web browser on your pc and go to the dashboard url(localhost:8081).
+- Opne the Visualiyzer on blowser,
+- If some blocks are added every second, it is OK.
+
+## For Edge Server and Cloud server
+
+This information is for IoT Edge Server and Cloud Server.
+
+### Required AWS EC2 Setteing for Cloud server
+- 8GB or upper RAM
+- A quad-core or upper CPU
+   - The t3.xlarge is enogh to meet the reuqriements.
+- Open port 8081, 14265, 15600, 14626 with securiy group
+- Ubuntu 18.04 LTS
+
+### Setup Docker
+- Install dokcer & docker compose.
+    - See the officail page of Dcoker.
+        - https://docs.docker.com/engine/install/
+        - https://docs.docker.com/compose/install/
+
+### Install node.js and npm
+
+```
+$ sudo apt install nodejs npm
+```
+
+node 8.10.0 or later is requeired. Please check the vession.
+
+```
+$ node -v
+```
+
+#### Build individual Hornet node
+- This is assumed a cloud server.
+- Enter the EC2 instanse of Hornet node.
+- Execute commands in below.
+
+```
+$ git clone https://github.com/aramsan/iota-docker/
 $ cd iota-docker/hornet
 $ docker-compse build
-```
-
-#### Individual child node
-- This is for the edge server of IoT Device.
-- Please prepare the IP Address of Hornet node.
-
-```
-$ cd iota-docker/node
-$ export HORNETADDRESS=xx.xx.xx.xx
-$ docker-compse build
-```
-
-#### All nodes on 1 instanse (1 hornet node and 4 nodes)
-
-```
-$ docker-compse build
-```
-
-### Start the instance
-
-```
 $ docker-compose up -d
 ```
 
-### Check the node
+#### Build individual Child node
+- This is for the edge server of IoT Device.
+- Prepare the IP Address of Hornet node.
 
-- Open a web browser on your pc and go to the dash board url. 
+```
+$ sudo apt install node npm
+$ git clone https://github.com/aramsan/iota-docker/
+$ cd iota-docker/node
+$ export HORNETADDRESS=xx.xx.xx.xx(IP Address of Hornet node)
+$ docker-compse build
+$ docker-compose up -d
+```
+
+#### Check the dashboad
+- Open a web browser on your pc and go to the dashboard url([IP_ADDRESS]:8081).
+    - Plase check the all nodes.
 - If you can see the dashboard, then it works.
 - After that, check the sync status. If "Synced" is displayed, it is OK.
-#### Individual Hornet node and child node
+
+#### Check the writing function
+
+- Enter the child node via SSH.
+- Execute commands in below.
+
 ```
-[IP Address]:8081
+$ cd iota-docker/scripts
+$ npm run test
 ```
 
-#### All nodes on 1 instanse (1 hornet node and 4 nodes)
+- Open a web browser on your pc and go to the dashboard url([IP_ADDRESS]:8081).
+- Opne the Visualiyzer on blowser,
+- If some blocks are added every second, it is OK.
+- If somplblems occur, please check the internal of dokcer instanse.
+
 ```
-Dashboard of hornet: localhost:8081
-Dashboard of node1: localhost:8082
-   ...
-Dashboard of node4: localhost:8085
+ssh root@localhost -p 222
+    ...
+cd /app/iota-docker/scripts/test_scripts
+npm run test
 ```
-### SSH connection
-#### Individual Hornet node
+
+# How to Use the sample code
+
+## API
+
+- The child node(on the edge server) has an interface of witring to bloackchain.
+- API
+    - http://localhost:4001/api/set
+    - POST Method
+    - JSON body is in below
+
+```
+{
+    "camera_id": num,
+    "first_frame_number": num,
+    "last_frame_number": num,
+    "hash": sha256,
+    "previous_transaction_hash": sha256, 
+    "exexute": any,
+}
+```
+
+- Parameters
+    -  camera_id
+        - This is cammera ID number.
+    - first_frame_number
+        - This is first frame number of hased data.
+    - last_frame_number
+        - This is last frame number of hased data.
+    - hash
+        - This is hash stacked camera data.
+        - Hash algorithm is sha256.
+    -  previous_stansaction_hash
+        - This is previous transaction's hash.
+    - execute
+        - Please set always "1"
+        - This is flag of executsion.
+            - If this parameter exists, writing is executed.
+- About hash
+    - This hashed camera raw data.
+    - 3 frames example
+        1. Create hash of first frame from raw image data.
+        2. Add the previous transaction hash and first hash. - (A)
+        3. Create hash of sececond frame.
+        4. Add (A) and second hash. -(B)
+        5. Hash (B). - (C)
+        6. Create hash of third frame.
+        7. Add (C) to third hash. - (D)
+        8. (D) is final hash. This hash will store the blockchain.
+
+# Appendix
+## How to SSH connection
+
+### Individual Hornet node
 ```
 ssh root@localhost -p 222
 ```
 - The password is 'root'.
 
-#### Individual child node
+### Individual child node
 - This is for the edge server.
 ```
 ssh root@localhost -p 222
 ```
 - The password is 'root'.
 
-#### All nodes on 1 instanse (1 hornet node and 4 nodes)
+### All nodes on 1 instanse (1 hornet node and 4 nodes)
 - hornet node
 ```
 ssh root@localhost -p 2222
@@ -109,18 +225,12 @@ ssh root@localhost -p 2225
 ```
 - The password is 'root'.
 
+## Log file
 
-# How to Test
+### Log file of blockchain
+- /var/log/hornet/hornet.log
 
-- Enter the child node via SSH. Then execute test scirpt.
-```
-ssh root@localhost -p 222
-    ...
-cd /app/iota-docker/scripts/test_scripts
-npm run test
-```
-
-- See the visualizer on http://[IP Address]:8081:/visalizer with browser on host PC. 
-- If AWS EC2 is used, then see the visualizer on http://ec2-xxx-xxx-xxx-xxx.region-region-xx.compute.amazonaws.com:8081 with browser on own PC.
+### Log file of API server
+- /var/log/hornet/script.log
 
 
