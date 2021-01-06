@@ -13,8 +13,8 @@ async function main(){
     const camera_id = 1; // カメラID 
     var first_frame_number = 1; // 書き込む最初のフレーム番号
     var frame_number = 0; // 現在のフレーム番号
-    var previous_temporary_transction_hash = 0; // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
-    var previous_transaction_hash = 0; // ブロックチェーンに書き込まれた1つ前のハッシュ値
+    var previous_temporary_transction_hash = crypto.createHash('sha256').update("0").digest('hex'); // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
+    var previous_transaction_hash = previous_temporary_transction_hash; // ブロックチェーンに書き込まれた1つ前のハッシュ値
 
     setInterval(function() {
         frame_number++;
