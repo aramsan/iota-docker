@@ -39,7 +39,7 @@ var server = app.listen(4001, function(){
 app.post("/api/set", [
     check('camera_id').isInt(),
     check('first_frame_number').isInt(),
-    check('frame_number').isInt(),
+    check('last_frame_number').isInt(),
     check('hash').isHash('sha256'),
     check('previous_transaction_hash').isHash('sha256')
 ],function(req, res){
@@ -54,7 +54,7 @@ app.post("/api/set", [
         let data = {
             "camera_id": req.body.camera_id,
             "first_frame_number": req.body.first_frame_number,
-            "last_frame_number": req.body.frame_number,
+            "last_frame_number": req.body.last_frame_number,
             "previous_transaction_hash": req.body.previous_transaction_hash, 
             "hash": req.body.hash,
             "signature": signature,
