@@ -1,12 +1,12 @@
 # IOTA-docker
 
 Build multiple IOTA test nodes with docker.
-Samplecodes of movie hashing are included.
+Sample codes for hashed camera data are included.
 
 # How to setup
 ## For development evironmenet
 
-This information is for a development environmenet. It is assumed PC or vertual machine.
+This information is for a development environmenet. It is assumed PC or virtual machine.
 
 ### Reuquired specification
 - 8GB or upper RAM
@@ -25,7 +25,7 @@ This information is for a development environmenet. It is assumed PC or vertual 
 $ sudo apt install nodejs npm
 ```
 
-node 8.10.0 or later is requeired. Please check the vession.
+node 8.10.0 or later is requeired. Please check the version.
 
 ```
 $ node -v
@@ -36,7 +36,7 @@ $ node -v
 ```
 $ git clone https://github.com/aramsan/iota-docker/
 $ cd iota-docker
-$ docker-compse build
+$ docker-compose build
 ```
 
 ### Start Up Blockchain
@@ -56,6 +56,7 @@ $ dcoker-compose -up d
 
 ```
 $ cd iota-docker/scripts
+$ npm install
 $ npm run test
 ```
 
@@ -100,7 +101,7 @@ $ node -v
 ```
 $ git clone https://github.com/aramsan/iota-docker/
 $ cd iota-docker/hornet
-$ docker-compse build
+$ docker-compose build
 $ docker-compose up -d
 ```
 
@@ -119,7 +120,7 @@ $ docker-compose up -d
 
 #### Check the dashboad
 - Open a web browser on your pc and go to the dashboard url([IP_ADDRESS]:8081).
-    - Plase check the all nodes.
+    - Please check the all nodes.
 - If you can see the dashboard, then it works.
 - After that, check the sync status. If "Synced" is displayed, it is OK.
 
@@ -158,10 +159,8 @@ npm run test
 ```
 {
     "camera_id": num,
-    "first_frame_number": num,
-    "last_frame_number": num,
+    frame_number": num,
     "hash": sha256,
-    "previous_transaction_hash": sha256, 
     "exexute": any,
 }
 ```
@@ -169,19 +168,17 @@ npm run test
 - Parameters
     -  camera_id
         - This is cammera ID number.
-    - first_frame_number
-        - This is first frame number of hased data.
-    - last_frame_number
-        - This is last frame number of hased data.
+    - frame_number
+        - This is a current frame number
     - hash
-        - This is hash stacked camera data.
+        - This is hashed camera data.
         - Hash algorithm is sha256.
     -  previous_stansaction_hash
         - This is previous transaction's hash.
     - execute
-        - Please set always "1"
         - This is flag of executsion.
-            - If this parameter exists, writing is executed.
+        - If this parameter exists, writing function to blockchain is executed.
+       
 - About hash
     - This hashed camera raw data.
     - 3 frames example
