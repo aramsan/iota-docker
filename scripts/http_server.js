@@ -29,6 +29,11 @@ getAddress(seed, 1).then(function(ret_address){
 });
 const keypair = createKeyPair();
 
+
+var first_frame_number = 1; // 書き込む最初のフレーム番号
+var previous_temporary_transction_hash = crypto.createHash('sha256').update("0").digest('hex'); // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
+var previous_transaction_hash = previous_temporary_transction_hash; // ブロックチェーンに書き込まれた1つ前のハッシュ値
+
 /* 2. listen()メソッドを実行して4001番ポートで待ち受け。*/
 var server = app.listen(4001, function(){
     console.log("Node.js is listening to PORT:" + server.address().port);
@@ -38,10 +43,8 @@ var server = app.listen(4001, function(){
 // write API
 app.post("/api/set", [
     check('camera_id').isInt(),
-    check('first_frame_number').isInt(),
-    check('last_frame_number').isInt(),
+    check('frame_number').isInt(),
     check('hash').isHash('sha256'),
-    check('previous_transaction_hash').isHash('sha256')
 ],function(req, res){
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -49,20 +52,27 @@ app.post("/api/set", [
     }
 
     var ret = {};
+    let temporary_transction_hash = stackHash(previous_temporary_transction_hash, req.body.hash);// 1つ前のハッシュ値に今回のハッシュ値を重畳する
     if(req.body.execute) {
-        let signature = createSignature(req.body.hash, keypair.privateKey );// ハッシュ値に署名をつける
-        let data = {
+        const hash = temporary_transction_hash;
+        const signature = createSignature(hash, keypair.privateKey );// ハッシュ値に署名をつける
+        const data = {
             "camera_id": req.body.camera_id,
-            "first_frame_number": req.body.first_frame_number,
-            "last_frame_number": req.body.last_frame_number,
-            "previous_transaction_hash": req.body.previous_transaction_hash, 
-            "hash": req.body.hash,
+            "first_frame_number": first_frame_number,
+            "last_frame_number": req.body.frame_number,
+            "previous_transaction_hash": previous_transaction_hash, 
+            "hash": hash,
             "signature": signature,
             "camera_public_key": keypair.publicKey
         };
         console.log(data);
         writeToTangle({"node": iota, "address":address, "data": data});
+        // 次の記録のための各パラメーターの準備
+        previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
+        first_frame_number = frame_number + 1; // 次の書き込みの最初のフレーム番号の設定
     }
+    previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
+
     const date = new Date();
     const now = date.getTime();
     ret.resutl = "OK";
