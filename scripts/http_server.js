@@ -69,7 +69,7 @@ app.post("/api/set", [
         writeToTangle({"node": iota, "address":address, "data": data});
         // 次の記録のための各パラメーターの準備
         previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
-        first_frame_number = frame_number + 1; // 次の書き込みの最初のフレーム番号の設定
+        first_frame_number = req.body.frame_number + 1; // 次の書き込みの最初のフレーム番号の設定
     }
     previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
 
