@@ -51,14 +51,12 @@ app.post("/api/set", [
     if (!temporary_transction_data[req.body.camera_id]) {
         temporary_transction_data[req.body.camera_id] = {
             "first_frame_number":1, // アグリゲーションしている最初のフレーム番号
-            "previous_temporary_transction_hash":crypto.createHash('sha256').update("0").digest('hex'), // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
             "previous_transaction_hash":crypto.createHash('sha256').update("0").digest('hex'),// 1つ前の書き込みでブロックチェーンに書き込まれたハッシュ値
             "keypair":createKeyPair(),//カメラの鍵ペアを生成。本来であれば、環境変数などデバイスに持たせておく
         }
     }
-    let temporary_transction_hash = stackHash(temporary_transction_data[req.body.camera_id].previous_temporary_transction_hash, req.body.hash);// 1つ前のハッシュ値に今回のハッシュ値を重畳する
     if(req.body.execute) {
-        const hash = temporary_transction_hash;
+        const hash = req.body.hash;
         const signature = createSignature(hash, temporary_transction_data[req.body.camera_id].keypair.privateKey );// ハッシュ値に署名をつける
         const data = {
             "camera_id": req.body.camera_id,
@@ -75,8 +73,7 @@ app.post("/api/set", [
         temporary_transction_data[req.body.camera_id].previous_transaction_hash = hash; // 今回登録したハッシュが次のトランザクションで使う1個前のハッシュ値になる
         temporary_transction_data[req.body.camera_id].first_frame_number = req.body.frame_number + 1; // 次の書き込みの最初のフレーム番号の設定
     }
-    temporary_transction_data[req.body.camera_id].previous_temporary_transction_hash = temporary_transction_hash;// トランザクション最初のハッシュ値は今のフレームのみのハッシュ値を使う
-
+    
     const date = new Date();
     const now = date.getTime();
     ret.resutl = "OK";

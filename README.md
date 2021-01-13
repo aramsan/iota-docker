@@ -137,7 +137,7 @@ $ npm run test
 - Open a web browser on your pc and go to the dashboard url([IP_ADDRESS]:8081).
 - Opne the Visualiyzer on blowser,
 - If some blocks are added every second, it is OK.
-- If somplblems occur, please check the internal of dokcer instanse.
+- If some problems occur, please check the internal of dokcer instanse.
 
 ```
 ssh root@localhost -p 222
@@ -161,7 +161,7 @@ npm run test
     "camera_id": num,
     frame_number": num,
     "hash": sha256,
-    "exexute": any,
+    "execute": any,
 }
 ```
 
@@ -171,16 +171,16 @@ npm run test
     - frame_number
         - This is a current frame number
     - hash
-        - This is hashed camera data.
+        - This is stack hashed camera data.
         - Hash algorithm is sha256.
     -  previous_stansaction_hash
         - This is previous transaction's hash.
     - execute
-        - This is flag of executsion.
+        - This is flag of execution.
         - If this parameter exists, writing function to blockchain is executed.
        
 - About hash
-    - This hashed camera raw data.
+    - This is hashed camera raw data.
     - 3 frames example
         1. Create hash of first frame from raw image data.
         2. Add the previous transaction hash and first hash. - (A)
