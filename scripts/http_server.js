@@ -161,3 +161,7 @@ function verifySignature(message, publicKey, signature) {
     const isVerified = publicKeyPair.verify(message, signature);
     return isVerified;
 }
+
+function stackHash(previous_hash, current_hash) {
+    return crypto.createHash('sha256').update(previous_hash + current_hash).digest('hex');
+}
