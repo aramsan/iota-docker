@@ -27,15 +27,8 @@ var address;
 getAddress(seed, 1).then(function(ret_address){
     address = ret_address;
 });
-const keypair = createKeyPair();
 
-var temporary_transction_data = {}; // 書き込む最初のフレーム番号
-
-/*
-var first_frame_number = 1; // 書き込む最初のフレーム番号
-var previous_temporary_transction_hash = crypto.createHash('sha256').update("0").digest('hex'); // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
-var previous_transaction_hash = previous_temporary_transction_hash; // ブロックチェーンに書き込まれた1つ前のハッシュ値
-*/
+var temporary_transction_data = {}; // カメラごとに保持するデータ
 
 /* 2. listen()メソッドを実行して4001番ポートで待ち受け。*/
 var server = app.listen(4001, function(){
@@ -57,10 +50,10 @@ app.post("/api/set", [
     var ret = {};
     if (!temporary_transction_data[req.body.camera_id]) {
         temporary_transction_data[req.body.camera_id] = {
-            "first_frame_number":1, // 書き込む最初のフレーム番号
+            "first_frame_number":1, // アグリゲーションしている最初のフレーム番号
             "previous_temporary_transction_hash":crypto.createHash('sha256').update("0").digest('hex'), // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
-            "previous_transaction_hash":crypto.createHash('sha256').update("0").digest('hex'),
-            "keypair":createKeyPair()
+            "previous_transaction_hash":crypto.createHash('sha256').update("0").digest('hex'),// 1つ前の書き込みでブロックチェーンに書き込まれたハッシュ値
+            "keypair":createKeyPair(),//カメラの鍵ペアを生成。本来であれば、環境変数などデバイスに持たせておく
         }
     }
     let temporary_transction_hash = stackHash(temporary_transction_data[req.body.camera_id].previous_temporary_transction_hash, req.body.hash);// 1つ前のハッシュ値に今回のハッシュ値を重畳する
@@ -127,7 +120,7 @@ function writeToTangle(payload) {
         })
         .then(bundle => {
             const bundle_hash = bundle[0].hash;// このハッシュ値をデータベースに書き込む
-            console.log(bundle_hash + " <- transaction hash- " + payload.data.frame_num);
+            console.log(bundle_hash + " <- transaction hash - " + payload.data.first_frame_number);
         })
         .catch(err => {
             console.log(err);
