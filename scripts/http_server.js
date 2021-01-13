@@ -60,12 +60,13 @@ app.post("/api/set", [
             "first_frame_number":1, // 書き込む最初のフレーム番号
             "previous_temporary_transction_hash":crypto.createHash('sha256').update("0").digest('hex'), // 次回ブロックチェーンに書き込むまでスタックしていくハッシュ値
             "previous_transaction_hash":crypto.createHash('sha256').update("0").digest('hex'),
+            "keypair":createKeyPair()
         }
     }
     let temporary_transction_hash = stackHash(temporary_transction_data[req.body.camera_id].previous_temporary_transction_hash, req.body.hash);// 1つ前のハッシュ値に今回のハッシュ値を重畳する
     if(req.body.execute) {
         const hash = temporary_transction_hash;
-        const signature = createSignature(hash, keypair.privateKey );// ハッシュ値に署名をつける
+        const signature = createSignature(hash, temporary_transction_data[req.body.camera_id].keypair.privateKey );// ハッシュ値に署名をつける
         const data = {
             "camera_id": req.body.camera_id,
             "first_frame_number": temporary_transction_data[req.body.camera_id].first_frame_number,
@@ -73,7 +74,7 @@ app.post("/api/set", [
             "previous_transaction_hash": temporary_transction_data[req.body.camera_id].previous_transaction_hash, 
             "hash": hash,
             "signature": signature,
-            "camera_public_key": keypair.publicKey
+            "camera_public_key": temporary_transction_data[req.body.camera_id].keypair.publicKey
         };
         console.log(data);
         writeToTangle({"node": iota, "address":address, "data": data});
